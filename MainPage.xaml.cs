@@ -1,69 +1,77 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.ObjectModel;
+using System.Diagnostics;
 
 namespace MathOperators;
 
 public partial class MainPage : ContentPage
 {
+    /// <summary>
+    /// Remembers the expressions that were calculated by the user
+    /// </summary>
+    private ObservableCollection<string> _expList;
+    
     public MainPage()
     {
         InitializeComponent();
+        
+        _expList = new ObservableCollection<string>();
+        _lstExpHistory.ItemsSource = _expList;     
     }
 
-    //OnCalculate event for when the "Calculate" button is pressed.
     private void OnCalculate(object sender, EventArgs e)
     {
-        //Get input to the Arithmetic Operation.
+        //Get the input to the arithmetic operation
         double leftOperand = double.Parse(_txtLeftOp.Text);
         double rightOperand = double.Parse(_txtRightOp.Text);
         
-        //Obtain the character that represents the operation
-        //Cast to string is possible because SelectedItem is an object.
-        //Extra parenthesis are needed to ensure the index operator is applied to the result. 
-        char opEntry = ((string)_pckOperand.SelectedItem)[0];
-        
-        //Perform the Arithmetic Operation and obtain the result.
-        double result = PerformOperation(opEntry, leftOperand, rightOperand);
-        
-        //Display the result to the user.
-        _txtMathExp.Text = $"{leftOperand} {opEntry} {rightOperand} = {result}";
+        //Obtain the character that represents the arithmetic operation
+        //Cast to string is possible because SelectedItem is an Object
+        //Extra paranthesis are needed to ensure the index operator is applied to the result of the cast
+        char operation = ((string)_pckOperand.SelectedItem)[0]; 
 
+        //Perform the arithmetic operation and obtain the result
+        double result = PerformArithmeticOperation(operation, leftOperand, rightOperand);
 
+        //Display the arithmetic calculation to the user. Show the work!
+        string expression = $"{leftOperand} {operation} {rightOperand} = {result}";
+        
+        //remember the expression in the page's field variable
+        _expList.Add(expression);
+        
+        _txtMathExp.Text = expression;
     }
 
-    private double PerformOperation(char opEntry, double leftOperand, double rightOperand)
+    private double PerformArithmeticOperation(char operation, double leftOperand, double rightOperand)
     {
-        //Perform the calculation.
-        switch (opEntry)
+        switch (operation)
         {
             case '+':
                 return PerformAddition(leftOperand, rightOperand);
-            
+
             case '-':
-                return PerformSubtraction(leftOperand, rightOperand);
-            
+                return PerformSubraction(leftOperand, rightOperand);
+
             case '*':
                 return PerformMultiplication(leftOperand, rightOperand);
-            
+
             case '/':
                 return PerformDivision(leftOperand, rightOperand);
-            
+
             case '%':
                 return PerformDivRemainder(leftOperand, rightOperand);
-            
+
             default:
-                Debug.Assert(false, "Unknown arithmetic operand. Cannot perform operation.");
+                Debug.Assert(false, "Unknown arithmetic opearand. Cannot perform the artighmetic operation.");
                 return 0;
         }
-
-        
-
     }
+
     private double PerformAddition(double leftOperand, double rightOperand)
     {
-        return leftOperand + rightOperand;
+        return (leftOperand + rightOperand);
     }
     
-    private double PerformSubtraction(double leftOperand, double rightOperand)
+    private double PerformSubraction(double leftOperand, double rightOperand)
     {
         return leftOperand - rightOperand;
     }
@@ -75,25 +83,24 @@ public partial class MainPage : ContentPage
     
     private double PerformDivision(double leftOperand, double rightOperand)
     {
-        string divOp = _pckOperand.SelectedItem as string;
+        string divOp = _pckOperand.SelectedItem as string; //another way of casting used for objects
         if (divOp.Contains("Int", StringComparison.OrdinalIgnoreCase))
         {
-            //Integer Division
+            //Integer division is performed when the operands are both integers
             int intLeftOp = (int)leftOperand;
             int intRightOp = (int)rightOperand;
-            int result = intLeftOp / intRightOp;
+            double result =  intLeftOp / intRightOp;
             return result;
         }
         else
         {
-            //Real Division
-            return leftOperand / rightOperand;
+            //Real division
+            return leftOperand / rightOperand;    
         }
     }
     
     private double PerformDivRemainder(double leftOperand, double rightOperand)
-    {
-        return leftOperand % rightOperand;
-    }
-    
+    {                                                                          
+        return leftOperand % rightOperand;                                     
+    }                                                                          
 }
