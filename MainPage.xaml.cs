@@ -43,25 +43,6 @@ public partial class MainPage : ContentPage
             _lstExpHistory.ItemsSource = null;
             _lstExpHistory.ItemsSource = _expList;
         }
-        catch (ArgumentNullException ex)
-        {
-            //The user did not provide any input.
-            await DisplayAlert("ERROR", "Please provide the required input!", "Continue");
-
-        }
-
-        catch (FormatException ex)
-        {
-            //The user has provided input but it's not a number
-            await DisplayAlert("ERROR", "Please provide the required input!", "Continue");
-
-        }
-
-        catch (DivideByZeroException ex)
-        {
-            //The user tried to divide by 0.
-            await DisplayAlert("You divided by... WHAT!?!", "Please provide a denominator that isn't 0 (Or use real division instead)", "Fine");
-        }
         
         catch (CalculatorException ex)
         {
