@@ -20,3 +20,5 @@ riderModule.iml
 /dataSources.local.xml
 TypeExplorer.csproj.user
 /MathOperators.csproj.user
+
+.fake
