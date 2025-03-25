@@ -23,19 +23,19 @@ public partial class MainPage : ContentPage
         try
         {
             //Get input to the Arithmetic Operation.
-            double leftOperand = double.Parse(_txtLeftOp.Text);
-            double rightOperand = double.Parse(_txtRightOp.Text);
+            double leftOperand = ReadLeftOperand();
+            double rightOperand = ReadRightOperand();
 
             //Obtain the character that represents the operation
             //Cast to string is possible because SelectedItem is an object.
             //Extra parenthesis are needed to ensure the index operator is applied to the result. 
-            char opEntry = ((string)_pckOperand.SelectedItem)[0];
+            char operation = ReadArithmeticOperation();
 
             //Perform the Arithmetic Operation and obtain the result.
-            double result = PerformOperation(opEntry, leftOperand, rightOperand);
+            double result = PerformOperation(operation, leftOperand, rightOperand);
 
             //Display the result to the user and save to history.
-            string expression = $"{leftOperand} {opEntry} {rightOperand} = {result}";
+            string expression = $"{leftOperand} {operation} {rightOperand} = {result}";
             _expList.Add(expression);
 
             _txtMathExp.Text = expression;
@@ -66,15 +66,45 @@ public partial class MainPage : ContentPage
         catch (CalculatorException ex)
         {
             //The user tried to divide by 0.
-            await DisplayAlert("ERROR", ex.Message, "Fine");
+            await DisplayAlert(title: "Arithmetic Calculator", ex.Message, cancel: "OK");
         }
 
     }
 
-    private double PerformOperation(char opEntry, double leftOperand, double rightOperand)
+    private char ReadArithmeticOperation()
+    {
+        //Step 1: Obtain the input
+        string opInput = _pckOperand.SelectedItem as string;
+
+        //Step 2: Validate the input
+        if (String.IsNullOrWhiteSpace(opInput))
+        {
+            throw new CalculatorException("Please select one of the arithmetic operations");
+        }
+
+        //Step 3: Use the input
+        //Obtain the character that represents the operation
+        //Cast to string is possible because SelectedItem is an object.
+        //Extra parenthesis are needed to ensure the index operator is applied to the result.
+        char operation = ((string)_pckOperand.SelectedItem)[0];
+
+        return operation;
+    }
+
+    private double ReadRightOperand()
+    {
+        return double.Parse(_txtRightOp.Text);
+    }
+
+    private double ReadLeftOperand()
+    {
+        return double.Parse(_txtLeftOp.Text);
+    }
+
+    private double PerformOperation(char operation, double leftOperand, double rightOperand)
     {
         //Perform the calculation.
-        switch (opEntry)
+        switch (operation)
         {
             case '+':
                 return PerformAddition(leftOperand, rightOperand);
