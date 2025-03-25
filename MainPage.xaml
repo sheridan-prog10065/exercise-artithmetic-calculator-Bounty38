@@ -19,11 +19,11 @@
                 <Entry x:Name="_txtLeftOp" Margin="0, 6, 10, 0"/>
             </VerticalStackLayout>
             <Picker x:Name="_pckOperand"
-                    Title="..."
+                    Title=""
                     Grid.Column="1"
                     HorizontalOptions="Center"
                     VerticalOptions="End"
-                    HeightRequest="34"
+                    HeightRequest="60"
                     WidthRequest="150">
                 <Picker.ItemsSource>
                     <x:Array Type="{x:Type x:String}">
@@ -43,10 +43,20 @@
         </Grid>
         <Button Text="Calculate" 
                 WidthRequest="200"
-                Margin="20, 0" FontSize="17" VerticalOptions="Center"/>
+                Margin="20, 0" FontSize="17" VerticalOptions="Center"
+                Clicked="OnCalculate"/>
         <VerticalStackLayout HorizontalOptions="Center">
             <Label Text="Arithmetic Expression" FontSize="17"/>
             <Entry x:Name="_txtMathExp" FontSize="17" IsReadOnly="True"/>
         </VerticalStackLayout>
+        <VerticalStackLayout>
+            <Label Text="Expression History"/>
+            <Border>
+                <ListView x:Name="_lstExpHistory"
+                          HeightRequest="350"/>
+                
+            </Border>
+        </VerticalStackLayout>
+        
     </VerticalStackLayout>
 </ContentPage>
